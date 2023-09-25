@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import "./Auth.css";
 
 import Logo from "../../img/logo.png";
 import { Link } from "react-router-dom";
+import { logIn, signUp } from "../../actions/AuthAction";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
-
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     firstname: "",
     lastname: "",
@@ -26,9 +28,11 @@ const Auth = () => {
     e.preventDefault();
 
     if (isSignUp) {
-      if (data.password !== data.confirmpass) {
-        setConfirmPass(false);
-      }
+      data.password === data.confirmpass
+        ? dispatch(signUp(data))
+        : setConfirmPass(false);
+    } else {
+      dispatch(logIn(data));
     }
   };
 
@@ -138,7 +142,6 @@ const Auth = () => {
           </button>
         </form>
       </div>
-      {/* <LogIn /> */}
     </div>
   );
 };
